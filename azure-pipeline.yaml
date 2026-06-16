@@ -18,6 +18,7 @@ stages:
   - ${{ if eq(parameters.deployPH, true) }}:
     - stage: PH_Sandbox
       displayName: PH — Sandbox
+      dependsOn: []
       jobs:
         - job: build_deploy
           displayName: Build & Deploy
@@ -33,7 +34,7 @@ stages:
       jobs:
         - deployment: build_deploy
           displayName: Build & Deploy
-          environment: production
+          environment: production-PH
           strategy:
             runOnce:
               deploy:
@@ -46,6 +47,7 @@ stages:
   - ${{ if eq(parameters.deployPC, true) }}:
     - stage: PC_Sandbox
       displayName: PC — Sandbox
+      dependsOn: []
       jobs:
         - job: build_deploy
           displayName: Build & Deploy
@@ -61,7 +63,7 @@ stages:
       jobs:
         - deployment: build_deploy
           displayName: Build & Deploy
-          environment: production
+          environment: production-PC
           strategy:
             runOnce:
               deploy:
@@ -74,6 +76,7 @@ stages:
   - ${{ if eq(parameters.deployDP, true) }}:
     - stage: DP_Sandbox
       displayName: DP — Sandbox
+      dependsOn: []
       jobs:
         - job: build_deploy
           displayName: Build & Deploy
@@ -89,7 +92,7 @@ stages:
       jobs:
         - deployment: build_deploy
           displayName: Build & Deploy
-          environment: production
+          environment: production-DP
           strategy:
             runOnce:
               deploy:
