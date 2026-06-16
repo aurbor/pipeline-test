@@ -14,42 +14,87 @@ parameters:
     type: boolean
     default: false
 
-  - name: environment
-    displayName: Environment
-    type: string
-    default: dev
-    values:
-      - dev
-      - staging
-      - prod
-
 stages:
   - ${{ if eq(parameters.deployPH, true) }}:
-    - stage: Deploy_PH
-      displayName: Deploy PH to ${{ parameters.environment }}
+    - stage: PH_Sandbox
+      displayName: PH — Sandbox
       jobs:
-        - job: deploy
-          displayName: Deploy PH
+        - job: build_deploy
+          displayName: Build & Deploy
           steps:
-            - script: echo "Deploying PH to ${{ parameters.environment }}"
-              displayName: Deploy PH
+            - script: echo "Building PH for sandbox"
+              displayName: Build
+            - script: echo "Deploying PH to sandbox"
+              displayName: Deploy
+
+    - stage: PH_Production
+      displayName: PH — Production
+      dependsOn: PH_Sandbox
+      jobs:
+        - deployment: build_deploy
+          displayName: Build & Deploy
+          environment: production
+          strategy:
+            runOnce:
+              deploy:
+                steps:
+                  - script: echo "Building PH for production"
+                    displayName: Build
+                  - script: echo "Deploying PH to production"
+                    displayName: Deploy
 
   - ${{ if eq(parameters.deployPC, true) }}:
-    - stage: Deploy_PC
-      displayName: Deploy PC to ${{ parameters.environment }}
+    - stage: PC_Sandbox
+      displayName: PC — Sandbox
       jobs:
-        - job: deploy
-          displayName: Deploy PC
+        - job: build_deploy
+          displayName: Build & Deploy
           steps:
-            - script: echo "Deploying PC to ${{ parameters.environment }}"
-              displayName: Deploy PC
+            - script: echo "Building PC for sandbox"
+              displayName: Build
+            - script: echo "Deploying PC to sandbox"
+              displayName: Deploy
+
+    - stage: PC_Production
+      displayName: PC — Production
+      dependsOn: PC_Sandbox
+      jobs:
+        - deployment: build_deploy
+          displayName: Build & Deploy
+          environment: production
+          strategy:
+            runOnce:
+              deploy:
+                steps:
+                  - script: echo "Building PC for production"
+                    displayName: Build
+                  - script: echo "Deploying PC to production"
+                    displayName: Deploy
 
   - ${{ if eq(parameters.deployDP, true) }}:
-    - stage: Deploy_DP
-      displayName: Deploy DP to ${{ parameters.environment }}
+    - stage: DP_Sandbox
+      displayName: DP — Sandbox
       jobs:
-        - job: deploy
-          displayName: Deploy DP
+        - job: build_deploy
+          displayName: Build & Deploy
           steps:
-            - script: echo "Deploying DP to ${{ parameters.environment }}"
-              displayName: Deploy DP
+            - script: echo "Building DP for sandbox"
+              displayName: Build
+            - script: echo "Deploying DP to sandbox"
+              displayName: Deploy
+
+    - stage: DP_Production
+      displayName: DP — Production
+      dependsOn: DP_Sandbox
+      jobs:
+        - deployment: build_deploy
+          displayName: Build & Deploy
+          environment: production
+          strategy:
+            runOnce:
+              deploy:
+                steps:
+                  - script: echo "Building DP for production"
+                    displayName: Build
+                  - script: echo "Deploying DP to production"
+                    displayName: Deploy
