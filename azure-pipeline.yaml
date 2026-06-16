@@ -1,0 +1,55 @@
+trigger: none
+
+parameters:
+  - name: deployPH
+    displayName: Deploy PH
+    type: boolean
+    default: false
+  - name: deployPC
+    displayName: Deploy PC
+    type: boolean
+    default: false
+  - name: deployDP
+    displayName: Deploy DP
+    type: boolean
+    default: false
+
+  - name: environment
+    displayName: Environment
+    type: string
+    default: dev
+    values:
+      - dev
+      - staging
+      - prod
+
+stages:
+  - ${{ if eq(parameters.deployPH, true) }}:
+    - stage: Deploy_PH
+      displayName: Deploy PH to ${{ parameters.environment }}
+      jobs:
+        - job: deploy
+          displayName: Deploy PH
+          steps:
+            - script: echo "Deploying PH to ${{ parameters.environment }}"
+              displayName: Deploy PH
+
+  - ${{ if eq(parameters.deployPC, true) }}:
+    - stage: Deploy_PC
+      displayName: Deploy PC to ${{ parameters.environment }}
+      jobs:
+        - job: deploy
+          displayName: Deploy PC
+          steps:
+            - script: echo "Deploying PC to ${{ parameters.environment }}"
+              displayName: Deploy PC
+
+  - ${{ if eq(parameters.deployDP, true) }}:
+    - stage: Deploy_DP
+      displayName: Deploy DP to ${{ parameters.environment }}
+      jobs:
+        - job: deploy
+          displayName: Deploy DP
+          steps:
+            - script: echo "Deploying DP to ${{ parameters.environment }}"
+              displayName: Deploy DP
